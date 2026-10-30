@@ -36,6 +36,12 @@ To best follow along with this course, it is recommended that you fork or clone 
 
 In this repository, there is a `start` and `end` branch that contains all of the code that is written up to that point in the course videos. You can checkout these individual branches if you would like to compare the code you have written, or to follow along from a particular point in the course.
 
+### Using GitHub Actions on a clone
+
+The deployment and publishing workflows are manual-only and require an explicit confirmation input. Before using them, verify the destination/package name and configure GitHub environments named `itchio-deploy`, `npm-publish`, and `versioning` with required reviewers under **Settings > Environments**. Without environment protection rules, the confirmation input is the only approval gate.
+
+For Itch.io deployment, set the `ITCH_USER` and `ITCH_GAME` repository variables and add `ITCH_IO_API_KEY` as an environment secret for `itchio-deploy`. The package workflow publishes the package name in `tsconfig-project/package.json` using the workflow's `GITHUB_TOKEN`; verify that name and package destination before confirming a run. The versioning workflow can push version commits and tags when confirmed and approved.
+
 Here is the list of branches and the videos they correspond to:
 
 * Part 1: Introduction (N/A)

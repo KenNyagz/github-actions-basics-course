@@ -1,27 +1,33 @@
 name: Merge Example
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - typescript-project/**
   workflow_dispatch:
+    inputs:
+      confirm_version_commit:
+        description: Confirm creating and pushing a version commit and tag
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
 
 jobs:
   merge:
+    if: inputs.confirm_version_commit
     runs-on: ubuntu-latest
+    environment: versioning
 
     defaults:
       run:
         working-directory: typescript-project
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       # Setup Nodejs
       - name: Setup Node.js 16
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: "16.x"
           cache: 'npm'

@@ -1,16 +1,22 @@
 name: Itch.io Deploy Workflow
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - tic-tac-toe-project/**
   workflow_dispatch:
+    inputs:
+      confirm_deployment:
+        description: Confirm deployment to the configured Itch.io game
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
 
 jobs:
   itchio-deploy:
+    if: inputs.confirm_deployment
     runs-on: ubuntu-latest
+    environment: itchio-deploy
 
     defaults:
       run:
@@ -18,6 +24,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
 
       - name: Setup Node.js 16
         uses: actions/setup-node@v3
@@ -39,13 +47,19 @@ jobs:
         env:
           CI: true
 
-      - run: ls
+      - name: Validate Itch.io destination
+        env:
+          ITCH_USER: ${{ vars.ITCH_USER }}
+          ITCH_GAME: ${{ vars.ITCH_GAME }}
+        run: |
+          test -n "$ITCH_USER" || { echo "::error::Set the ITCH_USER repository variable."; exit 1; }
+          test -n "$ITCH_GAME" || { echo "::error::Set the ITCH_GAME repository variable."; exit 1; }
 
       - name: Deploy
-        uses: josephbmanley/butler-publish-itchio-action@v1.0.3
+        uses: josephbmanley/butler-publish-itchio-action@cb6573e42b67220c61a15b80d9b6e7ed7a68929c
         env:
           BUTLER_CREDENTIALS: ${{ secrets.ITCH_IO_API_KEY }}
           CHANNEL: HTML
-          ITCH_GAME: github-actions-tic-tac-toe-example
-          ITCH_USER: galemius
+          ITCH_GAME: ${{ vars.ITCH_GAME }}
+          ITCH_USER: ${{ vars.ITCH_USER }}
           PACKAGE: tic-tac-toe-project/dist

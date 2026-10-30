@@ -1,43 +1,40 @@
 name: Publish GitHub NPM Package
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - tsconfig-project/**
   workflow_dispatch:
+    inputs:
+      confirm_publish:
+        description: Confirm publishing the configured npm package
+        required: true
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   npm-publish:
+    if: inputs.confirm_publish
     runs-on: ubuntu-latest
+    environment: npm-publish
 
     defaults:
       run:
         working-directory: tsconfig-project
 
-    strategy:
-      fail-fast: true
-
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node.js 16
-        uses: actions/setup-node@v2
+      - uses: actions/checkout@v4
         with:
-          node-version: "16.x"
+          persist-credentials: false
 
-      - run: git config user.email "scottwestover2006@gmail.com"
-      - run: git config user.name "@github-ci"
-      - run: yarn version --patch --message "Bump version to %s"
-
-      - run: git push
-      - run: git push --follow-tags
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+          registry-url: https://npm.pkg.github.com
 
       - name: publish to github
-        run: |
-          npm config set registry https://npm.pkg.github.com
-          npm set //npm.pkg.github.com/:_authToken ${{ env.NODE_AUTH_TOKEN }}
-          npm run publish:github
+        run: npm run publish:github
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
