@@ -32,5 +32,6 @@ jobs:
 
       # Run test
       - name: Run tests
-        run: node --version
-        run: yarn test
+        run: 
+          node --version
+          yarn test
