@@ -49,7 +49,7 @@ jobs:
         run: yarn test
 
       - run: git config user.email "kennyagz681@gmail.com"
-      - run: git config user.name "Ken Nyaga"
+      - run: git config user.name "@github-ci"
       - run: yarn version --patch --message "Bump version to %s"
 
       - run: git push
