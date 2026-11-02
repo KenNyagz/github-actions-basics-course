@@ -1,0 +1,34 @@
+{
+	"name": "@kennyagz/tsconfig-project",
+	"version": "0.0.8",
+	"description": "Shared TypeScript config for my projects",
+	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/kennyagz/github-actions-basics-course.git",
+		"directory": "packages/tsconfig-project"
+	},
+	"bugs": {
+		"url": "https://github.com/kennyagz/github-actions-basics-course/issues"
+	},
+	"homepage": "https://github.com/kennyagz/github-actions-basics-course/tsconfig-project/#readme",
+	"author": {
+		"name": "Kenny Nyaga",
+		"email": "kennyagz681@gmail.com"
+	},
+	"main": "tsconfig.json",
+	"files": [
+		"tsconfig.json"
+	],
+	"keywords": [
+		"tsconfig",
+		"typescript",
+		"ts",
+		"config",
+		"configuration"
+	],
+	"scripts": {
+		"publish:npm": "npm publish --registry https://registry.npmjs.org/ --access public --ignore-scripts",
+		"publish:github": "npm publish --registry https://npm.pkg.github.com/ --ignore-scripts"
+	}
+}
